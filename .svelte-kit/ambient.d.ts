@@ -48,7 +48,6 @@ declare module '$env/static/private' {
 	export const CONDA_SHLVL: string;
 	export const CONDA_PROMPT_MODIFIER: string;
 	export const TERM_PROGRAM_VERSION: string;
-	export const npm_package_optional: string;
 	export const COLOR: string;
 	export const rvm_hook: string;
 	export const rvm_promptless: string;
@@ -62,7 +61,6 @@ declare module '$env/static/private' {
 	export const COMMAND_MODE: string;
 	export const npm_config_globalconfig: string;
 	export const CONDA_EXE: string;
-	export const npm_package_peer: string;
 	export const rvm_path: string;
 	export const SSH_AUTH_SOCK: string;
 	export const __CF_USER_TEXT_ENCODING: string;
@@ -72,7 +70,6 @@ declare module '$env/static/private' {
 	export const rvm_ruby_file: string;
 	export const PAGER: string;
 	export const WARP_USE_SSH_WRAPPER: string;
-	export const npm_package_integrity: string;
 	export const _CE_CONDA: string;
 	export const LSCOLORS: string;
 	export const rvm_silent_flag: string;
@@ -95,14 +92,11 @@ declare module '$env/static/private' {
 	export const rvm_sdk: string;
 	export const LANG: string;
 	export const XPC_FLAGS: string;
-	export const npm_package_engines_node: string;
 	export const npm_config_node_gyp: string;
-	export const npm_package_dev: string;
 	export const npm_package_version: string;
 	export const _CE_M: string;
 	export const XPC_SERVICE_NAME: string;
 	export const rvm_version: string;
-	export const npm_package_resolved: string;
 	export const rvm_script_name: string;
 	export const rvm_pretty_print_flag: string;
 	export const PYENV_SHELL: string;
@@ -110,7 +104,6 @@ declare module '$env/static/private' {
 	export const HOME: string;
 	export const rvm_ruby_mode: string;
 	export const HOMEBREW_PREFIX: string;
-	export const npm_package_dev_optional: string;
 	export const npm_config_cache: string;
 	export const CONDA_PYTHON_EXE: string;
 	export const LESS: string;
@@ -136,6 +129,7 @@ declare module '$env/static/private' {
 	export const npm_node_execpath: string;
 	export const npm_config_prefix: string;
 	export const COLORTERM: string;
+	export const NODE_ENV: string;
 }
 
 /**
@@ -187,7 +181,6 @@ declare module '$env/dynamic/private' {
 		CONDA_SHLVL: string;
 		CONDA_PROMPT_MODIFIER: string;
 		TERM_PROGRAM_VERSION: string;
-		npm_package_optional: string;
 		COLOR: string;
 		rvm_hook: string;
 		rvm_promptless: string;
@@ -201,7 +194,6 @@ declare module '$env/dynamic/private' {
 		COMMAND_MODE: string;
 		npm_config_globalconfig: string;
 		CONDA_EXE: string;
-		npm_package_peer: string;
 		rvm_path: string;
 		SSH_AUTH_SOCK: string;
 		__CF_USER_TEXT_ENCODING: string;
@@ -211,7 +203,6 @@ declare module '$env/dynamic/private' {
 		rvm_ruby_file: string;
 		PAGER: string;
 		WARP_USE_SSH_WRAPPER: string;
-		npm_package_integrity: string;
 		_CE_CONDA: string;
 		LSCOLORS: string;
 		rvm_silent_flag: string;
@@ -234,14 +225,11 @@ declare module '$env/dynamic/private' {
 		rvm_sdk: string;
 		LANG: string;
 		XPC_FLAGS: string;
-		npm_package_engines_node: string;
 		npm_config_node_gyp: string;
-		npm_package_dev: string;
 		npm_package_version: string;
 		_CE_M: string;
 		XPC_SERVICE_NAME: string;
 		rvm_version: string;
-		npm_package_resolved: string;
 		rvm_script_name: string;
 		rvm_pretty_print_flag: string;
 		PYENV_SHELL: string;
@@ -249,7 +237,6 @@ declare module '$env/dynamic/private' {
 		HOME: string;
 		rvm_ruby_mode: string;
 		HOMEBREW_PREFIX: string;
-		npm_package_dev_optional: string;
 		npm_config_cache: string;
 		CONDA_PYTHON_EXE: string;
 		LESS: string;
@@ -275,6 +262,7 @@ declare module '$env/dynamic/private' {
 		npm_node_execpath: string;
 		npm_config_prefix: string;
 		COLORTERM: string;
+		NODE_ENV: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}
