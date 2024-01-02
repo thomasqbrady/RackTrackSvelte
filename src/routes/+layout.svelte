@@ -1,14 +1,13 @@
 <script lang="ts">
 	import '../app.pcss';
-	import { TabGroup, TabAnchor, Modal } from '@skeletonlabs/skeleton';
+	import { TabGroup, TabAnchor, Modal, AppBar } from '@skeletonlabs/skeleton';
 	import { initializeStores } from '@skeletonlabs/skeleton';
 	import type { ModalComponent } from '@skeletonlabs/skeleton';
 
+	import { Dumbbell, Settings } from 'lucide-svelte';
+
 	import { page } from '$app/stores';
 
-	import Icon from '$lib/icons/Icon.svelte';
-	import Pulse from '$lib/icons/Pulse.svelte';
-	import Gear from '$lib/icons/Gear.svelte';
 	import CreateExerciseModal from '$lib/CreateExerciseModal.svelte';
 
 	const modalRegistry: Record<string, ModalComponent> = {
@@ -18,11 +17,9 @@
 	initializeStores();
 </script>
 
-<Modal components={modalRegistry} />
+<Modal components={modalRegistry} regionBackdrop="bg-surface-backdrop-token" />
 
 <div class="p-4">
-	<h1 class="h1 w-full text-center font-bold">RackTrack</h1>
-
 	<slot />
 </div>
 
@@ -36,12 +33,12 @@
 	class="bg-surface-100-800-token w-full fixed bottom-0"
 >
 	<TabAnchor href="/" selected={$page.url.pathname === '/'}>
-		<svelte:fragment slot="lead"><Icon symbol={Pulse} /></svelte:fragment>
-		<span>Workout</span>
+		<svelte:fragment slot="lead"><Dumbbell /></svelte:fragment>
+		<span>Workouts</span>
 	</TabAnchor>
 
 	<TabAnchor href="/settings" selected={$page.url.pathname === '/settings'}>
-		<svelte:fragment slot="lead"><Icon symbol={Gear} /></svelte:fragment>
+		<svelte:fragment slot="lead"><Settings /></svelte:fragment>
 		<span>Settings</span>
 	</TabAnchor>
 </TabGroup>

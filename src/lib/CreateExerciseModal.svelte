@@ -1,17 +1,28 @@
 <script lang="ts">
 	import { getModalStore } from '@skeletonlabs/skeleton';
-	import type { SvelteComponent } from 'svelte';
+	import { onMount, type SvelteComponent } from 'svelte';
+	import type { Writable } from 'svelte/store';
 	import type { ExerciseType } from './types';
+	import { localStorageStore } from '@skeletonlabs/skeleton';
+
+	const exercises: Writable<Array<ExerciseType>> = localStorageStore('exercises', []);
 
 	export let parent: SvelteComponent;
 
 	const modalStore = getModalStore();
 
+	onMount(() => {
+		exercise.id = $exercises.length + 1;
+		exercise.index = $exercises.length + 1;
+	});
+
 	let exercise: ExerciseType = {
+		id: 0,
 		name: '',
 		weight: 0,
 		reps: 0,
-		complete: false
+		complete: false,
+		index: 0
 	};
 
 	function onFormSubmit(event: Event) {
@@ -20,33 +31,39 @@
 	}
 </script>
 
-<div>
+<div class="card text-xl p-4">
 	<label
-		>Name:
+		>Exercise name:
 		<input
 			type="text"
-			class="input"
+			class="input p-2"
 			title="Name"
 			placeholder="Bench press"
 			bind:value={exercise.name}
 		/>
 	</label>
-	<label
+	<label class="mt-4"
 		>Weight:
 		<input
 			type="number"
-			class="input"
+			class="input p-2"
 			title="Weight"
 			placeholder="120"
 			bind:value={exercise.weight}
 		/>
 	</label>
-	<label
+	<label class="mt-4"
 		>Reps:
-		<input type="number" class="input" title="Reps" placeholder="30" bind:value={exercise.reps} />
+		<input
+			type="number"
+			class="input p-2"
+			title="Reps"
+			placeholder="30"
+			bind:value={exercise.reps}
+		/>
 	</label>
 	<div class="mt-4 w-full text-right">
 		<button class="btn variant-filled" on:click={parent.onClose}>Cancel</button>
-		<button class="btn variant-filled" on:click={onFormSubmit}>Save</button>
+		<button class="btn variant-filled-primary" on:click={onFormSubmit}>Save</button>
 	</div>
 </div>

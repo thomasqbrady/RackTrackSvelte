@@ -4,7 +4,7 @@
 </script>
 
 <div class="w-full flex">
-	<input type="checkbox" class="checkbox flex-basis-1/6" bind:value={exercise.complete} />
+	<input type="checkbox" class="checkbox flex-basis-1/6" bind:checked={exercise.complete} />
 	<div class="flex-basis-1/4">{exercise.name}</div>
 	<div class="flex-basis-1/4">
 		<p class="w-full text-center">{exercise.weight}</p>
