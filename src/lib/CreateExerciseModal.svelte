@@ -12,12 +12,12 @@
 	const modalStore = getModalStore();
 
 	onMount(() => {
-		exercise.id = $exercises.length + 1;
+		exercise.id = crypto.randomUUID();
 		exercise.index = $exercises.length + 1;
 	});
 
 	let exercise: ExerciseType = {
-		id: 0,
+		id: '',
 		name: '',
 		weight: 0,
 		reps: 0,

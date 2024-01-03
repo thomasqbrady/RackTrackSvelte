@@ -1,5 +1,5 @@
 export type ExerciseType = {
-    id: number;
+    id: string;
     name: string;
     weight: number;
     reps: number;
@@ -7,7 +7,12 @@ export type ExerciseType = {
     index: number;
 }
 
-export type WorkoutType = {
-    date: Date,
+export type ExerciseLog = {
+    exercise: ExerciseType | undefined;
+    count: number;
+}
+
+export type Workout = {
+    date: string,
     exercises: Array<ExerciseType>
 }
