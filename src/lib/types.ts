@@ -16,3 +16,8 @@ export type Workout = {
     date: string,
     exercises: Array<ExerciseType>
 }
+
+export type EditExerciseResponse = {
+    exercise?: ExerciseType;
+    remove: boolean;
+}

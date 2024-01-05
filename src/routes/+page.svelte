@@ -1,22 +1,32 @@
 <script lang="ts">
-	import type { ExerciseLog, ExerciseType, Workout } from '$lib/types';
+	import type { EditExerciseResponse, ExerciseLog, ExerciseType, Workout } from '$lib/types';
 	import Exercise from '$lib/Exercise.svelte';
-	import { AppBar, getModalStore, localStorageStore } from '@skeletonlabs/skeleton';
+	import {
+		AppBar,
+		getModalStore,
+		localStorageStore,
+		type ModalSettings
+	} from '@skeletonlabs/skeleton';
 	import type { Writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 
-	import { Dumbbell, File, Plus } from 'lucide-svelte';
+	import { Dumbbell, File, FileLineChart, Plus } from 'lucide-svelte';
 
 	import moment from 'moment';
+	import EditExerciseModal from '$lib/EditExerciseModal.svelte';
 
-	let today = '';
-	let lastSaved = '';
+	let today = moment().format('M/D/YYYY');
 	const modalStore = getModalStore();
 	const exercises: Writable<Array<ExerciseType>> = localStorageStore('exercises', []);
 	const workouts: Writable<Array<Workout>> = localStorageStore('workouts', []);
 
+	$: saved = $workouts.find((workout: Workout) => {
+		return workout.date === today;
+	})
+		? true
+		: false;
+
 	onMount(() => {
-		today = moment().format('ddd, MMM D:YYYY');
 		$workouts = $workouts.sort((a: Workout, b: Workout) => {
 			let aDate: Date = new Date(a.date);
 			let bDate: Date = new Date(b.date);
@@ -42,7 +52,6 @@
 			});
 		}
 		workouts.set($workouts);
-		console.log($workouts);
 	}
 
 	function getLastWorkout(exercise: ExerciseType): ExerciseLog {
@@ -60,18 +69,95 @@
 				workoutIndex = -1;
 			}
 		}
-		console.log(lastTime, count);
 		return { exercise: lastTime, count: count };
+	}
+
+	function selectExercise(e: MouseEvent) {
+		let target = e.target as HTMLElement;
+		const selectedExerciseId = (target.closest('[data-exercise-id]') as HTMLElement).dataset
+			?.exerciseId;
+		if (selectedExerciseId) {
+			let exe = $exercises.find((exercise) => {
+				return exercise.id === selectedExerciseId;
+			});
+			if (target.tagName.toLowerCase() === 'button') {
+				exe!.complete = !exe!.complete;
+				$exercises = $exercises;
+				return;
+			} else {
+				if (exe) {
+					editExercise(exe);
+				}
+			}
+		}
+	}
+
+	async function editExercise(exercise: ExerciseType) {
+		modalStore.trigger({
+			type: 'component',
+			component: {
+				ref: EditExerciseModal,
+				props: {
+					exercise: exercise,
+					editMode: true
+				}
+			},
+			response: (response: EditExerciseResponse) => {
+				let shouldRemove = false;
+				if (response?.remove) {
+					new Promise<boolean>((resolve) => {
+						const modal: ModalSettings = {
+							type: 'confirm',
+							title: 'Are you sure?',
+							body: 'Are you sure you want to remove this exercise?',
+							response: (r: boolean) => {
+								resolve(r);
+							}
+						};
+						modalStore.trigger(modal);
+					}).then((r: any) => {
+						if (r) {
+							const index = $exercises.findIndex((exe) => {
+								return exe.id === exercise.id;
+							});
+							$exercises.splice(index, 1);
+							$exercises = $exercises;
+						}
+					});
+				} else {
+					if (response?.exercise) {
+						const index =
+							$exercises.findIndex((exe) => {
+								return exe.id === exercise.id;
+							}) ?? $exercises.length;
+						$exercises[index] = response.exercise;
+						$exercises = $exercises;
+					}
+				}
+			}
+		});
 	}
 
 	async function addExercise(event: Event) {
 		modalStore.trigger({
 			type: 'component',
-			component: 'createExerciseModal',
-			response: (e: ExerciseType) => {
-				if (e) {
+			component: {
+				ref: EditExerciseModal,
+				props: {
+					exercise: {
+						id: crypto.randomUUID(),
+						name: '',
+						weight: 0,
+						reps: 0,
+						complete: false,
+						index: $exercises.length + 1
+					}
+				}
+			},
+			response: (response: EditExerciseResponse) => {
+				if (response?.exercise) {
 					exercises.update((workouts): Array<ExerciseType> => {
-						return [...workouts, e];
+						return [...workouts, response.exercise!];
 					});
 				}
 			}
@@ -79,26 +165,24 @@
 	}
 </script>
 
-<AppBar class="w-full mb-4">
+<AppBar class="w-full text-neutral-100" background="bg-secondary-500">
 	<svelte:fragment slot="lead">
-		<Dumbbell />
+		<button class="btn btn-icon" on:click={saveWorkout}>
+			{#if saved}
+				<FileLineChart />
+			{:else}
+				<File />
+			{/if}
+		</button>
 	</svelte:fragment>
-	<h2 class="h2" data-toc-ignore>{today.split(':')[0]}</h2>
+	<h2 class="h2" data-toc-ignore>{moment().format('ddd, MMM D')}</h2>
 	<svelte:fragment slot="trail">
-		<button class="btn btn-icon" on:click={saveWorkout}><File /></button>
+		<button class="btn btn-icon variant-filled-tertiary" on:click={addExercise}><Plus /></button>
 	</svelte:fragment>
 </AppBar>
 
-<ul>
+<ul on:click={selectExercise} class="bg-gradient-to-b from-tertiary-300 pt-2">
 	{#each $exercises as exercise}
 		<li><Exercise bind:exercise previousExercises={getLastWorkout(exercise)} /></li>
 	{/each}
 </ul>
-
-<button
-	type="button"
-	class="btn-icon variant-filled-primary fixed bottom-20 right-4"
-	on:click={addExercise}
->
-	<Plus />
-</button>

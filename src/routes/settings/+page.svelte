@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { DownloadCloud, UploadCloud } from 'lucide-svelte';
 	import type { ExerciseType, Workout } from '$lib/types';
-	import { FileButton, localStorageStore } from '@skeletonlabs/skeleton';
+	import { AppBar, FileButton, localStorageStore } from '@skeletonlabs/skeleton';
 	import type { Writable } from 'svelte/store';
 
 	const exercises: Writable<Array<ExerciseType>> = localStorageStore('exercises', []);
@@ -57,13 +57,18 @@
 	}
 </script>
 
-<h1 class="h1 pb-4">Save/Restore workouts</h1>
-<button type="button" class="btn variant-ringed" on:click={download}>
-	<span>Download</span>
-	<span><DownloadCloud /></span>
-</button>
+<AppBar class="w-full mb-4">
+	<h2 class="h2" data-toc-ignore>Settings</h2>
+</AppBar>
 
-<FileButton name="upload" bind:files on:change={importJSON} button="btn variant-ringed mt-4">
-	<span>Import</span>
-	<span><UploadCloud /></span>
-</FileButton>
+<div class="p-4">
+	<button type="button" class="btn variant-ringed" on:click={download}>
+		<span>Download</span>
+		<span><DownloadCloud /></span>
+	</button>
+
+	<FileButton name="upload" bind:files on:change={importJSON} button="btn variant-ringed mt-4">
+		<span>Import</span>
+		<span><UploadCloud /></span>
+	</FileButton>
+</div>

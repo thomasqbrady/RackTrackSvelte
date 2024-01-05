@@ -1,32 +1,22 @@
 <script lang="ts">
-	import { getModalStore } from '@skeletonlabs/skeleton';
-	import { onMount, type SvelteComponent } from 'svelte';
-	import type { Writable } from 'svelte/store';
+	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import type { SvelteComponent } from 'svelte';
 	import type { ExerciseType } from './types';
-	import { localStorageStore } from '@skeletonlabs/skeleton';
-
-	const exercises: Writable<Array<ExerciseType>> = localStorageStore('exercises', []);
+	import { Trash } from 'lucide-svelte';
 
 	export let parent: SvelteComponent;
+	export let exercise: ExerciseType;
+	export let editMode = false;
 
 	const modalStore = getModalStore();
 
-	onMount(() => {
-		exercise.id = crypto.randomUUID();
-		exercise.index = $exercises.length + 1;
-	});
+	function onDelete(event: Event) {
+		if ($modalStore[0].response) $modalStore[0].response({ exercise: null, remove: true });
+		modalStore.close();
+	}
 
-	let exercise: ExerciseType = {
-		id: '',
-		name: '',
-		weight: 0,
-		reps: 0,
-		complete: false,
-		index: 0
-	};
-
-	function onFormSubmit(event: Event) {
-		if ($modalStore[0].response) $modalStore[0].response(exercise);
+	function onSave(event: Event) {
+		if ($modalStore[0].response) $modalStore[0].response({ exercise: exercise, remove: false });
 		modalStore.close();
 	}
 </script>
@@ -64,6 +54,9 @@
 	</label>
 	<div class="mt-4 w-full text-right">
 		<button class="btn variant-filled" on:click={parent.onClose}>Cancel</button>
-		<button class="btn variant-filled-primary" on:click={onFormSubmit}>Save</button>
+		{#if editMode}
+			<button class="btn variant-filled-error" on:click={onDelete}>Remove</button>
+		{/if}
+		<button class="btn variant-filled-primary" on:click={onSave}>Save</button>
 	</div>
 </div>
