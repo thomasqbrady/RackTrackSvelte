@@ -165,7 +165,7 @@
 	}
 </script>
 
-<AppBar class="w-full text-neutral-100" background="bg-secondary-500">
+<AppBar class="w-full text-neutral-100" background="bg-tertiary-500">
 	<svelte:fragment slot="lead">
 		<button class="btn btn-icon" on:click={saveWorkout}>
 			{#if saved}
@@ -177,11 +177,11 @@
 	</svelte:fragment>
 	<h2 class="h2" data-toc-ignore>{moment().format('ddd, MMM D')}</h2>
 	<svelte:fragment slot="trail">
-		<button class="btn btn-icon variant-filled-tertiary" on:click={addExercise}><Plus /></button>
+		<button class="btn btn-icon variant-filled-primary text-white" on:click={addExercise}><Plus /></button>
 	</svelte:fragment>
 </AppBar>
 
-<ul on:click={selectExercise} class="bg-gradient-to-b from-tertiary-300 pt-2">
+<ul on:click={selectExercise} class="h-full bg-gradient-to-b from-tertiary-300 via-secondary-300 to-primary-200 pt-2">
 	{#each $exercises as exercise}
 		<li><Exercise bind:exercise previousExercises={getLastWorkout(exercise)} /></li>
 	{/each}

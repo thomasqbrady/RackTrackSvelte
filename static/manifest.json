@@ -24,9 +24,9 @@
           "type": "image/png"
         }
       ],
-        "background_color": "#ffffff",
+        "background_color": "#cdb0f4",
     "display": "fullscreen",
     "scope": "/",
-    "theme_color": "rgb(236,72,153)",
+    "theme_color": "rgb(168, 85, 247)",
     "description": "Rack Track"
 }

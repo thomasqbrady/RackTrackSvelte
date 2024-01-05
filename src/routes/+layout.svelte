@@ -24,12 +24,12 @@
 	<svelte:fragment slot="footer">
 		<TabGroup
 			justify="justify-center"
-			active="variant-filled-primary"
+			active="variant-filled-primary text-white"
 			hover="hover:variant-soft-primary"
 			flex="flex-1 lg:flex-none"
 			rounded=""
 			border=""
-			class="bg-surface-100-800-token w-full"
+			class="bg-primary-300 w-full"
 		>
 			<TabAnchor href="/" selected={$page.url.pathname === '/'}>
 				<svelte:fragment slot="lead"><Dumbbell /></svelte:fragment>

@@ -57,7 +57,7 @@
 	}
 </script>
 
-<AppBar class="w-full mb-4">
+<AppBar class="w-full text-neutral-100" background="bg-tertiary-500">
 	<h2 class="h2" data-toc-ignore>Settings</h2>
 </AppBar>
 
