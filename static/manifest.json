@@ -24,7 +24,7 @@
           "type": "image/png"
         }
       ],
-        "background_color": "#9d5aef",
+        "background_color": "#a855f7",
     "display": "fullscreen",
     "scope": "/",
     "theme_color": "rgb(168, 85, 247)",
