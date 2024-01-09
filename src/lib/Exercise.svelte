@@ -1,12 +1,7 @@
 <script lang="ts">
 	import type { ExerciseLog, ExerciseType, Workout } from './types';
-	import type { Writable } from 'svelte/store';
-	import { SlideToggle, localStorageStore } from '@skeletonlabs/skeleton';
-	import { Check } from 'lucide-svelte';
 	export let exercise: ExerciseType;
 	export let previousExercises: ExerciseLog;
-
-	const workouts: Writable<Array<Workout>> = localStorageStore('workouts', []);
 </script>
 
 <div class="flex flex-row items-center mb-2 text-primary-900" data-exercise-id={exercise.id}>
@@ -23,8 +18,12 @@
 	</div>
 	<div class="basis-3/12">
 		<p class="w-full text-center">
-			<span class="font-semibold text-2xl text-primary-800">{exercise.weight}</span><span class="text-sm">lbs</span>
+			<span class="font-semibold text-2xl text-primary-800">{exercise.weight}</span><span
+				class="text-sm">lbs</span
+			>
 		</p>
-		<p class="w-full text-center"><span class="font-semibold text-xl text-primary-800">{exercise.reps}</span>x</p>
+		<p class="w-full text-center">
+			<span class="font-semibold text-xl text-primary-800">{exercise.reps}</span>x
+		</p>
 	</div>
 </div>

@@ -9,27 +9,32 @@
 	let files: FileList;
 
 	function downloadObjectAsJson(exportObj: any, exportName: string) {
-		var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
-		var downloadAnchorNode = document.createElement('a');
+		let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
+		let downloadAnchorNode = document.createElement('a');
 		downloadAnchorNode.setAttribute('href', dataStr);
 		downloadAnchorNode.setAttribute('download', exportName + '.json');
 		document.body.appendChild(downloadAnchorNode); // required for firefox
 		downloadAnchorNode.click();
 		downloadAnchorNode.remove();
 	}
-	function download() {
+	function exportJSON() {
 		downloadObjectAsJson({ exercises: $exercises, workouts: $workouts }, 'export');
 	}
 	function importJSON(e: Event) {
-		if (files.length <= 0) {
+		console.log(files);
+		if (files?.length <= 0) {
 			return false;
 		}
 
-		var fr = new FileReader();
+		let fr = new FileReader();
 
 		fr.onload = function (e: ProgressEvent) {
 			const fileContents: string = fr.result as string;
-			var result = JSON.parse(fileContents);
+			console.log(fileContents);
+			if (!fileContents) {
+				return;
+			}
+			let result = JSON.parse(fileContents);
 			if (result.hasOwnProperty('exercises')) {
 				result.exercises.map((exercise: any) => {
 					let newExercise: ExerciseType = {
@@ -53,22 +58,28 @@
 				});
 			}
 		};
-		fr.readAsText(files.item(0) || new Blob());
+		fr.readAsText(files?.item(0) || new Blob());
 	}
 </script>
 
 <AppBar class="w-full text-neutral-100" background="bg-tertiary-500">
-	<h2 class="h2" data-toc-ignore>Settings</h2>
+	<svelte:fragment slot="lead">
+		<FileButton name="upload" bind:files on:change={importJSON}>
+			<UploadCloud />
+		</FileButton>
+	</svelte:fragment>
+	<h2 class="h2 w-full text-center" data-toc-ignore>History</h2>
+	<svelte:fragment slot="trail">
+		<button type="button" class="btn variant-ringed" on:click={exportJSON}>
+			<DownloadCloud />
+		</button>
+	</svelte:fragment>
 </AppBar>
 
-<div class="p-4">
-	<button type="button" class="btn variant-ringed" on:click={download}>
-		<span>Download</span>
-		<span><DownloadCloud /></span>
-	</button>
-
-	<FileButton name="upload" bind:files on:change={importJSON} button="btn variant-ringed mt-4">
-		<span>Import</span>
-		<span><UploadCloud /></span>
-	</FileButton>
-</div>
+<ul class="h-full bg-surface-100 pt-2">
+	{#each $workouts as workout}
+		<li class="w-full px-4 py-2 text-lg">
+			<a href="/history/{workout.date.replaceAll('/', '-')}">{workout.date}</a>
+		</li>
+	{/each}
+</ul>

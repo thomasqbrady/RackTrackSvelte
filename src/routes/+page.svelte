@@ -10,21 +10,39 @@
 	import type { Writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 
-	import { Dumbbell, File, FileLineChart, Plus } from 'lucide-svelte';
+	import { File, FileLineChart, Plus } from 'lucide-svelte';
 
 	import moment from 'moment';
 	import EditExerciseModal from '$lib/EditExerciseModal.svelte';
 
 	let today = moment().format('M/D/YYYY');
+	let saved = false;
+
 	const modalStore = getModalStore();
 	const exercises: Writable<Array<ExerciseType>> = localStorageStore('exercises', []);
 	const workouts: Writable<Array<Workout>> = localStorageStore('workouts', []);
 
-	$: saved = $workouts.find((workout: Workout) => {
-		return workout.date === today;
-	})
-		? true
-		: false;
+	exercises.subscribe((exercises) => {
+		console.log($exercises);
+
+		console.log(
+			$workouts.find((workout) => {
+				return (
+					workout.date === moment().format('M/D/YYYY') &&
+					JSON.stringify(workout.exercises) == JSON.stringify($exercises)
+				);
+			})
+		);
+
+		saved = $workouts.find((workout) => {
+			return (
+				workout.date === moment().format('M/D/YYYY') &&
+				JSON.stringify(workout.exercises) == JSON.stringify($exercises)
+			);
+		})
+			? true
+			: false;
+	});
 
 	onMount(() => {
 		$workouts = $workouts.sort((a: Workout, b: Workout) => {
@@ -33,25 +51,29 @@
 			return aDate < bDate ? -1 : 1;
 		});
 		$exercises = $exercises.sort((a: ExerciseType, b: ExerciseType) => {
+			console.log('sorting');
 			return a.index - b.index;
 		});
 	});
 
 	function saveWorkout() {
-		let found = false;
-		$workouts.map((workout) => {
-			if (workout.date === today) {
-				workout.exercises = $exercises;
-				found = true;
-			}
-		});
-		if (!found) {
-			$workouts.push({
-				date: moment().format('M/D/YYYY'),
-				exercises: $exercises
+		console.log('SAVING WORKOUT');
+		workouts.update((workouts) => {
+			let found = false;
+			workouts.map((workout) => {
+				if (workout.date === today) {
+					workout.exercises = [...$exercises];
+					found = true;
+				}
 			});
-		}
-		workouts.set($workouts);
+			if (!found) {
+				workouts.push({
+					date: moment().format('M/D/YYYY'),
+					exercises: [...$exercises]
+				});
+			}
+			return workouts;
+		});
 	}
 
 	function getLastWorkout(exercise: ExerciseType): ExerciseLog {
@@ -108,6 +130,11 @@
 							body: 'Are you sure you want to remove this exercise?',
 							response: (r: boolean) => {
 								resolve(r);
+							},
+							meta: {
+								props: {
+									buttonNeutral: 'rounded-2xl'
+								}
 							}
 						};
 						modalStore.trigger(modal);

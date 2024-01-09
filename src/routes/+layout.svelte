@@ -4,7 +4,7 @@
 	import { initializeStores } from '@skeletonlabs/skeleton';
 	import type { ModalComponent } from '@skeletonlabs/skeleton';
 
-	import { Dumbbell, Settings } from 'lucide-svelte';
+	import { CalendarDays, Dumbbell, Settings } from 'lucide-svelte';
 
 	import { page } from '$app/stores';
 
@@ -17,7 +17,7 @@
 	initializeStores();
 </script>
 
-<Modal components={modalRegistry} regionBackdrop="bg-surface-backdrop-token" />
+<Modal components={modalRegistry} regionBackdrop="bg-surface-backdrop-token" background="bg-slate-100" buttonNeutral="rounded-3xl" buttonPositive="text-white rounded-3xl variant-filled-primary"/>
 
 <AppShell>
 	<slot />
@@ -33,12 +33,12 @@
 		>
 			<TabAnchor href="/" selected={$page.url.pathname === '/'}>
 				<svelte:fragment slot="lead"><Dumbbell /></svelte:fragment>
-				<span>Workouts</span>
+				<span>Record workout</span>
 			</TabAnchor>
 
-			<TabAnchor href="/settings" selected={$page.url.pathname === '/settings'}>
-				<svelte:fragment slot="lead"><Settings /></svelte:fragment>
-				<span>Settings</span>
+			<TabAnchor href="/history" selected={$page.url.pathname === '/history'}>
+				<svelte:fragment slot="lead"><CalendarDays /></svelte:fragment>
+				<span>Past workouts</span>
 			</TabAnchor>
 		</TabGroup>
 	</svelte:fragment>

@@ -1,4 +1,7 @@
 {
 	"/": [],
-	"/settings": []
+	"/history": [],
+	"/history/[date]": [
+		"src/routes/history/[date]/+page.js"
+	]
 }

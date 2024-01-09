@@ -2,7 +2,7 @@
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import type { SvelteComponent } from 'svelte';
 	import type { ExerciseType } from './types';
-	import { Trash } from 'lucide-svelte';
+	import { Trash, Trash2, X } from 'lucide-svelte';
 
 	export let parent: SvelteComponent;
 	export let exercise: ExerciseType;
@@ -21,12 +21,12 @@
 	}
 </script>
 
-<div class="card text-xl p-4">
+<div class="card text-xl p-4 bg-slate-100 rounded-lg relative pt-8">
 	<label
 		>Exercise name:
 		<input
 			type="text"
-			class="input p-2"
+			class="input bg-slate-200 rounded-lg border p-2"
 			title="Name"
 			placeholder="Bench press"
 			bind:value={exercise.name}
@@ -36,7 +36,7 @@
 		>Weight:
 		<input
 			type="number"
-			class="input p-2"
+			class="input bg-slate-200 rounded-lg border p-2"
 			title="Weight"
 			placeholder="120"
 			bind:value={exercise.weight}
@@ -46,17 +46,24 @@
 		>Reps:
 		<input
 			type="number"
-			class="input p-2"
+			class="input bg-slate-200 rounded-lg border p-2"
 			title="Reps"
 			placeholder="30"
 			bind:value={exercise.reps}
 		/>
 	</label>
-	<div class="mt-4 w-full text-right">
-		<button class="btn variant-filled" on:click={parent.onClose}>Cancel</button>
+	<button class="btn btn-icon bg-transparent absolute top-1 right-1" on:click={parent.onClose}
+		><X /></button
+	>
+	<div class="mt-4 w-full text-right flex justify-end gap-2">
 		{#if editMode}
-			<button class="btn variant-filled-error" on:click={onDelete}>Remove</button>
+			<button
+				class="btn rounded-3xl text-sm variant-outline-error text-error-500"
+				on:click={onDelete}>Remove exercise</button
+			>
 		{/if}
-		<button class="btn variant-filled-primary" on:click={onSave}>Save</button>
+		<button class="btn rounded-3xl text-sm text-white variant-filled-primary" on:click={onSave}
+			>Save changes</button
+		>
 	</div>
 </div>
