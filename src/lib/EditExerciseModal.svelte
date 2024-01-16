@@ -63,7 +63,7 @@
 			>
 		{/if}
 		<button class="btn rounded-3xl text-sm text-white variant-filled-primary" on:click={onSave}
-			>Save changes</button
+			>Save</button
 		>
 	</div>
 </div>

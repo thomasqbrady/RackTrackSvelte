@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { ExerciseLog, ExerciseType, Workout } from './types';
+	import type { ExerciseLog, ExerciseType } from './types';
 	export let exercise: ExerciseType;
-	export let previousExercises: ExerciseLog;
+	export let previousExercises: ExerciseLog = { exercise: undefined, count: 0 };
 </script>
 
 <div class="flex flex-row items-center mb-2 text-primary-900" data-exercise-id={exercise.id}>
@@ -14,7 +14,9 @@
 		<div class="text-xl font-semibold ml-2 text-primary-800">{exercise.name}</div>
 	</label>
 	<div class="basis-2/12 text-right text-sm">
-		last <span class="text-lg font-semibold text-primary-800">{previousExercises.count}</span>x
+		{#if previousExercises.exercise !== undefined}
+			last <span class="text-lg font-semibold text-primary-800">{previousExercises.count}</span>x
+		{/if}
 	</div>
 	<div class="basis-3/12">
 		<p class="w-full text-center">

@@ -7,6 +7,7 @@
 		localStorageStore,
 		type ModalSettings
 	} from '@skeletonlabs/skeleton';
+	import { writable, get } from 'svelte/store';
 	import type { Writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 
@@ -16,64 +17,63 @@
 	import EditExerciseModal from '$lib/EditExerciseModal.svelte';
 
 	let today = moment().format('M/D/YYYY');
+	const modalStore = getModalStore();
+
+	const workouts: Writable<Array<Workout>> = writable([]);
+	const exercises: Writable<Array<ExerciseType>> = localStorageStore('exercises', []);
+	const storedWorkouts: Writable<Array<Workout>> = localStorageStore('workouts', []);
+
 	let saved = false;
 
-	const modalStore = getModalStore();
-	const exercises: Writable<Array<ExerciseType>> = localStorageStore('exercises', []);
-	const workouts: Writable<Array<Workout>> = localStorageStore('workouts', []);
+	workouts.subscribe((workouts) => {
+		checkSaved();
+	});
 
 	exercises.subscribe((exercises) => {
-		console.log($exercises);
-
-		console.log(
-			$workouts.find((workout) => {
-				return (
-					workout.date === moment().format('M/D/YYYY') &&
-					JSON.stringify(workout.exercises) == JSON.stringify($exercises)
-				);
-			})
-		);
-
-		saved = $workouts.find((workout) => {
-			return (
-				workout.date === moment().format('M/D/YYYY') &&
-				JSON.stringify(workout.exercises) == JSON.stringify($exercises)
-			);
-		})
-			? true
-			: false;
+		checkSaved();
 	});
 
 	onMount(() => {
-		$workouts = $workouts.sort((a: Workout, b: Workout) => {
-			let aDate: Date = new Date(a.date);
-			let bDate: Date = new Date(b.date);
-			return aDate < bDate ? -1 : 1;
-		});
-		$exercises = $exercises.sort((a: ExerciseType, b: ExerciseType) => {
-			console.log('sorting');
-			return a.index - b.index;
-		});
+		workouts.set(
+			get(storedWorkouts).sort((a: Workout, b: Workout) => {
+				let aDate: Date = new Date(a.date);
+				let bDate: Date = new Date(b.date);
+				return aDate < bDate ? -1 : 1;
+			})
+		);
 	});
 
+	function checkSaved() {
+		if (
+			JSON.stringify(
+				get(storedWorkouts).find((workout: Workout) => {
+					return workout.date === today;
+				})?.exercises
+			) === JSON.stringify($exercises)
+		) {
+			saved = true;
+		} else {
+			saved = false;
+		}
+	}
+
 	function saveWorkout() {
-		console.log('SAVING WORKOUT');
-		workouts.update((workouts) => {
-			let found = false;
-			workouts.map((workout) => {
-				if (workout.date === today) {
-					workout.exercises = [...$exercises];
-					found = true;
-				}
-			});
-			if (!found) {
-				workouts.push({
-					date: moment().format('M/D/YYYY'),
-					exercises: [...$exercises]
-				});
+		let found = false;
+		let saved = get(storedWorkouts);
+		saved.map((workout) => {
+			if (workout.date === today) {
+				workout.exercises = $exercises;
+				found = true;
 			}
-			return workouts;
 		});
+		if (!found) {
+			saved.push({
+				date: moment().format('M/D/YYYY'),
+				exercises: $exercises
+			});
+		}
+		storedWorkouts.set(saved);
+		checkSaved();
 	}
 
 	function getLastWorkout(exercise: ExerciseType): ExerciseLog {
@@ -81,7 +81,7 @@
 		let count = 0;
 		let lastTime: ExerciseType | undefined;
 		while (workoutIndex > -1) {
-			lastTime = $workouts[workoutIndex].exercises.find((workoutExercise: ExerciseType) => {
+			lastTime = $workouts[workoutIndex].exercises?.find((workoutExercise: ExerciseType) => {
 				return workoutExercise.id === exercise.id;
 			});
 			if (lastTime && lastTime.weight === exercise.weight && lastTime.reps === exercise.reps) {
@@ -188,7 +188,7 @@
 	}
 </script>
 
-<AppBar class="w-full text-neutral-100" background="bg-tertiary-500">
+<AppBar class="w-full text-neutral-100 sticky top-0" background="bg-tertiary-500">
 	<svelte:fragment slot="lead">
 		<button class="btn btn-icon" on:click={saveWorkout}>
 			{#if saved}
