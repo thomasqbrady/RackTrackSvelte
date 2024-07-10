@@ -52,9 +52,6 @@
 			bind:value={exercise.reps}
 		/>
 	</label>
-	<button class="btn btn-icon bg-transparent absolute top-1 right-1" on:click={parent.onClose}
-		><X /></button
-	>
 	<div class="mt-4 w-full text-right flex justify-end gap-2">
 		{#if editMode}
 			<button
@@ -66,4 +63,7 @@
 			>Save</button
 		>
 	</div>
+	<button class="btn btn-icon bg-transparent absolute top-1 right-1" on:click={parent.onClose}
+		><X /></button
+	>
 </div>

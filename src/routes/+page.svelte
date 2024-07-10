@@ -11,7 +11,7 @@
 	import type { Writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 
-	import { File, FileLineChart, Plus } from 'lucide-svelte';
+	import { Eraser, Save, SaveOff, Plus } from 'lucide-svelte';
 
 	import moment from 'moment';
 	import EditExerciseModal from '$lib/EditExerciseModal.svelte';
@@ -179,11 +179,20 @@
 			},
 			response: (response: EditExerciseResponse) => {
 				if (response?.exercise) {
-					exercises.update((workouts): Array<ExerciseType> => {
-						return [...workouts, response.exercise!];
+					exercises.update((originalExercises): Array<ExerciseType> => {
+						return [...originalExercises, response.exercise!];
 					});
 				}
 			}
+		});
+	}
+
+	function clearAll() {
+		exercises.update((originalExercises) => {
+			return originalExercises.map((exercise) => {
+				exercise.complete = false;
+				return exercise;
+			});
 		});
 	}
 </script>
@@ -192,13 +201,16 @@
 	<svelte:fragment slot="lead">
 		<button class="btn btn-icon" on:click={saveWorkout}>
 			{#if saved}
-				<FileLineChart />
+				<Save />
 			{:else}
-				<File />
+				<SaveOff />
 			{/if}
 		</button>
+		<button class="btn btn-icon" on:click={clearAll}>
+			<Eraser />
+		</button>
+		<h2 class="ml-4 h2">RackTracker</h2>
 	</svelte:fragment>
-	<h2 class="h2" data-toc-ignore>{moment().format('ddd, MMM D')}</h2>
 	<svelte:fragment slot="trail">
 		<button class="btn btn-icon variant-filled-primary text-white" on:click={addExercise}
 			><Plus /></button
