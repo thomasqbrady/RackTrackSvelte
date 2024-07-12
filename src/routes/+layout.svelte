@@ -4,7 +4,7 @@
 	import { initializeStores } from '@skeletonlabs/skeleton';
 	import type { ModalComponent } from '@skeletonlabs/skeleton';
 
-	import { CalendarDays, Dumbbell, Settings } from 'lucide-svelte';
+	import { CalendarDays, Dumbbell, LineChart, Settings } from 'lucide-svelte';
 
 	import { page } from '$app/stores';
 
@@ -39,6 +39,10 @@
 			<TabAnchor href="/history" selected={$page.url.pathname === '/history'}>
 				<svelte:fragment slot="lead"><CalendarDays /></svelte:fragment>
 				<span>Past workouts</span>
+			</TabAnchor>
+			<TabAnchor href="/trends" selected={$page.url.pathname === '/trends'}>
+				<svelte:fragment slot="lead"><LineChart/></svelte:fragment>
+				<span>Trends</span>
 			</TabAnchor>
 		</TabGroup>
 	</svelte:fragment>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Exercise from '$lib/Exercise.svelte';
-	import type { ExerciseType, Workout, EditExerciseResponse } from '$lib/types.js';
+	import type { ExerciseType, Workout, EditExerciseResponse } from '$lib/types';
 	import {
 		AppBar,
 		localStorageStore,

@@ -1,9 +1,7 @@
 <script lang="ts">
 	import {
-		ArrowBigRight,
 		ArrowRight,
 		DownloadCloud,
-		Pencil,
 		Plus,
 		UploadCloud
 	} from 'lucide-svelte';
