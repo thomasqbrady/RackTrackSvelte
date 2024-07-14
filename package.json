@@ -41,6 +41,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tailwindcss/forms": "^0.5.7",
+		"apexcharts": "^3.50.0",
 		"lucide-svelte": "^0.407.0"
 	}
 }
