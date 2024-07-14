@@ -126,7 +126,11 @@
 		console.log(chartConfigMap);
 		exerciseNames.map((exerciseName) => {
 			let chartDiv = document.createElement('div');
-			chartDiv.classList.add('overflow-scroll');
+			chartDiv.classList.add('overflow-x-scroll', 'overflow-y-hidden', 'relative');
+			let heading = document.createElement('h3');
+			heading.classList.add('h3', 'w-full', 'text-center', 'mt-4', 'pt-8', 'sticky', 'left-0');
+			heading.textContent = exerciseName;
+			chartDiv.appendChild(heading);
 			chartsDiv.appendChild(chartDiv);
 			let chart = new ApexCharts(chartDiv, chartConfigMap.get(exerciseName));
 			chart.render();
@@ -134,13 +138,10 @@
 	}
 </script>
 
-<AppBar class="w-full text-neutral-100 sticky top-0" background="bg-tertiary-500">
-	<svelte:fragment slot="lead">
-		<a href="/history" class="btn">
-			<ArrowLeft />
-		</a>
-	</svelte:fragment>
-	<h2 class="h2" data-toc-ignore>Trends</h2>
+<AppBar class="w-full z-10 text-neutral-100 sticky top-0" background="bg-tertiary-500">
+	<svelte:fragment slot="lead"><span></span></svelte:fragment>
+	<h2 class="h2 w-full text-center" data-toc-ignore>Trends</h2>
+	<svelte:fragment slot="trail"><span></span></svelte:fragment>
 </AppBar>
 
-<div bind:this={chartsDiv} class=""></div>
+<div bind:this={chartsDiv} class="bg-surface-50"></div>
