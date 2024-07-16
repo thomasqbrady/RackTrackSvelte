@@ -41,11 +41,11 @@
 				<svelte:fragment slot="lead"><Dumbbell /></svelte:fragment>
 				<span>Record workout</span>
 			</TabAnchor>
-			<TabAnchor href="/trends" selected={$page.url.pathname === '/trends'}>
+			<TabAnchor href="/trends" selected={$page.url.pathname.startsWith('/trends')}>
 				<svelte:fragment slot="lead"><LineChart /></svelte:fragment>
 				<span>Trends</span>
 			</TabAnchor>
-			<TabAnchor href="/history" selected={$page.url.pathname === '/history'}>
+			<TabAnchor href="/history" selected={$page.url.pathname.startsWith('/history')}>
 				<svelte:fragment slot="lead"><CalendarDays /></svelte:fragment>
 				<span>Past workouts</span>
 			</TabAnchor>

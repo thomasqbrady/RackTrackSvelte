@@ -37,6 +37,9 @@
 		const ApexCharts = (await import('apexcharts')).default;
 		let options: any = {};
 		options.chart = {
+			animations: {
+				enabled: false
+			},
 			type: 'bar',
 			height: 350,
 			stacked: true,
@@ -144,4 +147,4 @@
 	<svelte:fragment slot="trail"><span></span></svelte:fragment>
 </AppBar>
 
-<div bind:this={chartsDiv} class="bg-surface-50"></div>
+<div bind:this={chartsDiv} class="bg-surface-50 h-full"></div>
